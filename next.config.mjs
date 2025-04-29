@@ -6,6 +6,16 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "1337",
+      },
+      // Production - Strapi di hosting
+      {
+        protocol: 'https',
+        hostname: 'cms.example.com',
+      },
     ],
   },
 };
