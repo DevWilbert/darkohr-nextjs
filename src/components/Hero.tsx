@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Container } from "@/components/Container";
+import { StrapiImage } from "./StrapiImage";
 
 interface HeroProps {
   data: {
+    id: number;
     heading: string;
-    text: string;
+    description: string;
     cta: {
       href: string;
       text: string;
@@ -20,8 +22,12 @@ interface HeroProps {
 }
 
 export function Hero({ data }: Readonly<HeroProps>) {
-  if (!data) return null;
-  const { heading, text, cta, image } = data;
+  if (!data) {
+    console.log("Data Tidak ada");
+    return null
+  };
+  console.log("data ada");
+  const { heading, description, cta, image } = data;
   return (
     <Container className="flex flex-wrap ">
       <div className="flex items-center w-full lg:w-1/2">
@@ -30,7 +36,7 @@ export function Hero({ data }: Readonly<HeroProps>) {
             {heading}
           </h1>
           <p className="py-5 text-xl leading-normal text-gray-500 lg:text-xl xl:text-2xl dark:text-gray-300">
-            {text}
+            {description}
           </p>
 
           <div className="flex flex-col items-start space-y-3 sm:space-x-4 sm:space-y-0 sm:items-center sm:flex-row">
@@ -67,7 +73,7 @@ export function Hero({ data }: Readonly<HeroProps>) {
       </div>
       <div className="flex items-center justify-center w-full lg:w-1/2">
         <div className="">
-          <Image
+          <StrapiImage
             src={image.url}
             width={616}
             height={617}

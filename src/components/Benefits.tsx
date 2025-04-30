@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Container } from "@/components/Container";
 
 import { CheckIcon } from "@heroicons/react/20/solid";
+import { StrapiImage } from "./StrapiImage";
 
 function iconSelect(iconKey: string) {
   switch (iconKey) {
@@ -27,7 +28,7 @@ interface BenefitProps {
       alternativeText: string | null;
       name: string;
     };
-    item: {
+    items: {
       id: number;
       text: string;
       icon: string | null;
@@ -37,7 +38,7 @@ interface BenefitProps {
 }
 
 export function Benefits({ data }: BenefitProps) {
-  const { heading, text, image, item, imageRight } = data;
+  const { heading, text, image, items, imageRight } = data;
   return (
     <Container className="flex flex-wrap mb-20 lg:gap-10 lg:flex-nowrap ">
       <div
@@ -46,7 +47,7 @@ export function Benefits({ data }: BenefitProps) {
         }`}
       >
         <div>
-          <Image
+          <StrapiImage
             src={image.url}
             width={521}
             height={521}
@@ -73,7 +74,7 @@ export function Benefits({ data }: BenefitProps) {
           </div>
 
           <div className="w-full mt-5">
-            {item.map((item, index) => (
+            {items.map((item, index) => (
               <Benefit
                 key={index}
                 data={item}
