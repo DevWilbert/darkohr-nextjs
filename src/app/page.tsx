@@ -89,20 +89,17 @@ function blockRenderer(block: any) {
     case "blocks.content-items":
       return <Benefits key={block.id} data={block} />;
 
-    // case "layout.content-image":
-    //   return <ContentWithImage key={block.id} data={block} />;
+    case "blocks.yt-video":
+      return <Video key={block.id} data={{ id: block.id, videoId: block.videoId }} />;
 
-    // case "blocks.yt-video":
-    //   return <Video key={block.id} data={{ id: block.id, videoId: block.videoId }} />;
+    case "blocks.card-quote":
+      return <Testimonials key={block.id} data={block} />;
 
-    // case "blocks.card-quote":
-    //   return <Testimonials key={block.id} data={block} />;
+    case "blocks.fa-qs":
+      return <Faq key={block.id} data={block} />;
 
-    // case "blocks.fa-qs":
-    //   return <Faq key={block.id} data={block} />;
-
-    // case "blocks.cta":
-    //   return <Cta key={block.id} data={block} />;
+    case "blocks.cta":
+      return <Cta key={block.id} data={block} />;
     default:
       return null;
   }

@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "@/components/Container";
 import Image from "next/image";
+import { StrapiImage } from "./StrapiImage";
 
 interface CardProps {
   id: number;
@@ -17,13 +18,13 @@ interface CardProps {
 interface TestimonialsProps {
   data: {
     id: number;
-    card: CardProps[];
+    cards: CardProps[];
   };
 }
 
 export function Testimonials({ data }: Readonly<TestimonialsProps>) {
   if (!data) return null;
-  const cards = data.card;
+  const cards = data.cards;
   return (
     <Container>
       <div className="grid gap-10 lg:grid-cols-2 xl:grid-cols-3">
@@ -46,7 +47,7 @@ function Avatar(props: CardProps) {
   return (
     <div className="flex items-center mt-8 space-x-3">
       <div className="flex-shrink-0 overflow-hidden rounded-full w-14 h-14">
-        <Image
+        <StrapiImage
           src={props.image.url}
           width={40}
           height={40}
