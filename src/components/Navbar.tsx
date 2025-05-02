@@ -1,16 +1,21 @@
+'use client'
+
 import Link from "next/link";
 import ThemeChanger from "./DarkSwitch";
 import { DisclosureClient } from "@/components/DisclosureClient";
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
+import LocaleSwitch from "./LocaleSwitch";
+import { useParams } from "next/navigation";
 
-async function loader() {
+async function loader(locale: string = 'id') {
   const { fetchData } = await import("@/lib/fetch");
 
   const path = "/api/global";
   const baseUrl = getStrapiURL();
 
   const query = qs.stringify({
+    locale: locale,
     populate: {
       topnav: {
         populate: {
@@ -77,7 +82,11 @@ interface NavbarData {
 }
 
 export async function Navbar() {
-  const data = await loader() as NavbarData;
+  // Mendapatkan locale dari params URL
+  const params = useParams();
+  const locale = params?.locale as string || 'id';
+
+  const data = await loader(locale) as NavbarData;
   if (!data) return null;
   const navigation = data.topnav.link;
   const cta = data.topnav.cta;
@@ -95,7 +104,7 @@ export async function Navbar() {
             {navigation.map((menu, index) => (
               <li className="mr-3 nav__item" key={index}>
                 <Link
-                  href={menu.href}
+                  href={`/${locale}${menu.href}`}
                   className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800"
                 >
                   {menu.text}
@@ -113,6 +122,7 @@ export async function Navbar() {
           >
             {cta.text}
           </Link>
+          <LocaleSwitch currentLocale={locale} />
           <ThemeChanger />
         </div>
       </nav>
