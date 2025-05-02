@@ -18,12 +18,27 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
   return (
     <div className="w-full">
       <nav className="container relative flex flex-wrap items-center justify-between p-8 mx-auto lg:justify-between xl:px-0">
-        {/* Logo  */}
-        <DisclosureClient topnav={data.topnav} />
+        {/* Logo dan Mobile/Tablet Menu */}
+        <DisclosureClient 
+          topnav={data.topnav} 
+          locale={locale} 
+          mobileExtras={
+            <>
+              <div className="flex flex-col gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex justify-between items-center">
+                  <LocaleSwitch currentLocale={locale} />
+                  <div className="ml-4">
+                    <ThemeChanger />
+                  </div>
+                </div>
+              </div>
+            </>
+          } 
+        />
 
-        {/* menu  */}
-        <div className="hidden text-center lg:flex lg:items-center">
-          <ul className="items-center justify-end flex-1 pt-6 list-none lg:pt-0 lg:flex">
+        {/* Desktop menu - tampil hanya di ukuran xl ke atas */}
+        <div className="hidden text-center xl:flex xl:items-center">
+          <ul className="items-center justify-end flex-1 pt-6 list-none xl:pt-0 xl:flex">
             {navigation.map((menu, index) => (
               <li className="mr-3 nav__item" key={index}>
                 <Link
@@ -37,7 +52,8 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
           </ul>
         </div>
 
-        <div className="hidden mr-3 space-x-4 lg:flex nav__item">
+        {/* Desktop CTA, LocaleSwitch & ThemeChanger - tampil hanya di ukuran xl ke atas */}
+        <div className="hidden mr-3 space-x-4 xl:flex nav__item">
           <Link
             href={`/${locale}${cta.href}`}
             className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"

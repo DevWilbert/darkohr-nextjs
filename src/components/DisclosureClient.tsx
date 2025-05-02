@@ -7,7 +7,6 @@ import {
 } from "@headlessui/react";
 
 import Link from "next/link";
-// import Image from "next/image";
 import { StrapiImage } from "./StrapiImage";
 
 interface LinkProps {
@@ -30,18 +29,20 @@ interface DisclosureClientProps {
     link: LinkProps[];
     cta: LinkProps;
   };
+  locale?: string;
+  mobileExtras?: React.ReactNode;
 }
 
-export function DisclosureClient(props: Readonly<DisclosureClientProps>) {
-  const navigation = props.topnav.link;
-  const logo = props.topnav.logoLink;
-  const cta = props.topnav.cta;
+export function DisclosureClient({ topnav, locale = '', mobileExtras }: Readonly<DisclosureClientProps>) {
+  const navigation = topnav.link;
+  const logo = topnav.logoLink;
+  const cta = topnav.cta;
 
   return (
     <Disclosure>
       {({ open }) => (
-        <div className="flex flex-wrap items-center justify-between w-full lg:w-auto">
-          <Link href={logo.href || "/"}>
+        <div className="flex flex-wrap items-center justify-between w-full xl:w-auto">
+          <Link href={`/${locale}${logo.href}` || "/"}>
             <span className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
               <span>
                 <StrapiImage
@@ -56,9 +57,10 @@ export function DisclosureClient(props: Readonly<DisclosureClientProps>) {
             </span>
           </Link>
 
+          {/* Tombol hamburger tampil di mobile dan tablet (xl ke bawah) */}
           <DisclosureButton
             aria-label="Toggle Menu"
-            className="px-2 py-1 ml-auto text-gray-500 rounded-md lg:hidden hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700"
+            className="px-2 py-1 ml-auto text-gray-500 rounded-md xl:hidden hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700"
           >
             <svg
               className="w-6 h-6 fill-current"
@@ -81,24 +83,28 @@ export function DisclosureClient(props: Readonly<DisclosureClientProps>) {
             </svg>
           </DisclosureButton>
 
-          <DisclosurePanel className="flex flex-wrap w-full my-5 lg:hidden">
+          {/* Panel disclosure untuk mobile dan tablet */}
+          <DisclosurePanel className="flex flex-wrap w-full my-5 xl:hidden">
             <>
               {navigation.map((item, index) => (
                 <Link
                   key={index}
-                  href={item.href}
+                  href={`/${locale}${item.href}`}
                   className="w-full px-4 py-2 -ml-4 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 dark:focus:bg-gray-800 focus:outline-none"
                 >
                   {item.text}
                 </Link>
               ))}
               <Link
-                href={cta.href}
+                href={`/${locale}${cta.href}`}
                 target={cta.external ? "_blank" : "_self"}
-                className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md lg:ml-5"
+                className="w-full px-6 py-2 mt-3 text-center text-white bg-indigo-600 rounded-md"
               >
                 {cta.text}
               </Link>
+              
+              {/* Menampilkan konten tambahan (LocaleSwitch dan ThemeChanger) di mobile dan tablet */}
+              {mobileExtras}
             </>
           </DisclosurePanel>
         </div>
