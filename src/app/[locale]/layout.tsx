@@ -3,10 +3,9 @@ import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/Navbar/Navbar";
 import { Footer } from "@/components/Footer";
 import { PopupWidget }  from "@/components/PopupWidget";
-
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,16 +17,31 @@ export const metadata: Metadata = {
   },
 };
 
+// This function can extract locale from the URL segments in a server component
+function getLocaleFromSegments(segments: string[]): string {
+  // Check if first segment is a locale we support
+  if (segments.length > 0 && (segments[0] === 'id' || segments[0] === 'en')) {
+    return segments[0];
+  }
+  // Default locale
+  return 'id';
+}
+
 export default function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: {locale?:string}
 }>) {
+  // Get locale from params, which Next.js automatically passes
+  const locale = params.locale || 'id';
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class">
-          <Navbar />
+          <Navbar locale={locale}/>
           <div>{children}</div>
           <Footer />
           <PopupWidget />

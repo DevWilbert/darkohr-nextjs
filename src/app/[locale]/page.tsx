@@ -78,28 +78,31 @@ async function loader() {
   return data;
 }
 
-function blockRenderer(block: any) {
+function blockRenderer(block: any, index: number) {
+
+  const uniqueKey = `${block.id}-${index}`;
+
   switch (block.__component) {
     case "blocks.hero-section":
-      return <Hero key={block.id} data={block} />;
+      return <Hero key={uniqueKey} data={block} />;
 
     case "blocks.section-heading":
-      return <SectionHeading key={block.id} data={block} />;
+      return <SectionHeading key={uniqueKey} data={block} />;
 
     case "blocks.content-items":
-      return <Benefits key={block.id} data={block} />;
+      return <Benefits key={uniqueKey} data={block} />;
 
     case "blocks.yt-video":
-      return <Video key={block.id} data={{ id: block.id, videoId: block.videoId }} />;
+      return <Video key={uniqueKey} data={{ id: block.id, videoId: block.videoId }} />;
 
     case "blocks.card-quote":
-      return <Testimonials key={block.id} data={block} />;
+      return <Testimonials key={uniqueKey} data={block} />;
 
     case "blocks.fa-qs":
-      return <Faq key={block.id} data={block} />;
+      return <Faq key={uniqueKey} data={block} />;
 
     case "blocks.cta":
-      return <Cta key={block.id} data={block} />;
+      return <Cta key={uniqueKey} data={block} />;
     default:
       return null;
   }
@@ -115,7 +118,7 @@ export default async function Home() {
   };
   return (
     <Container>
-    {blocks.map((block: any) => blockRenderer(block))}
+    {blocks.map((block: any, index: number) => blockRenderer(block, index))}
   </Container>
   );
 
