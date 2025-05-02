@@ -35,6 +35,7 @@ interface BenefitProps {
       heading: string;
     }[];
   };
+  locale: string;
 }
 
 export function Benefits({ data }: BenefitProps) {

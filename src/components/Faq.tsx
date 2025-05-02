@@ -22,6 +22,7 @@ interface FaqProps {
       publishedAt: string;
     }>;
   };
+  locale:string
 }
 
 export function Faq({ data }: FaqProps) {

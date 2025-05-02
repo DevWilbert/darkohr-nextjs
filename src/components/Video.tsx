@@ -7,6 +7,7 @@ interface VideoProps {
     id: number;
     videoId: string;
   };
+  locale:string;
 }
 
 export function Video({ data }: Readonly<VideoProps>) {

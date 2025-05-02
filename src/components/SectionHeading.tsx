@@ -8,6 +8,7 @@ interface SectionHeadingProps {
     heading: string;
     text: string;
   };
+  locale: string;
 }
 
 export function SectionHeading({ data }: Readonly<SectionHeadingProps>) {

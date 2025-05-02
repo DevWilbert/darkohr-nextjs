@@ -15,6 +15,7 @@ interface CtaProps {
       external: boolean;
     };
   };
+  locale: string;
 }
 
 export function Cta({ data }: CtaProps) {

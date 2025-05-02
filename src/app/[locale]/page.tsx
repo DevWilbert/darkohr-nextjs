@@ -10,13 +10,14 @@ import { Cta } from "@/components/Cta";
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
 
-async function loader() {
+async function loader(locale: string) {
   const { fetchData } = await import("@/lib/fetch");
 
   const path = "/api/home-page";
   const baseUrl = getStrapiURL();
 
   const query = qs.stringify({
+    locale: locale,
     populate: {
       blocks: {
         on: {
@@ -78,39 +79,43 @@ async function loader() {
   return data;
 }
 
-function blockRenderer(block: any, index: number) {
+function blockRenderer(block: any, index: number, locale:string) {
 
   const uniqueKey = `${block.id}-${index}`;
 
   switch (block.__component) {
     case "blocks.hero-section":
-      return <Hero key={uniqueKey} data={block} />;
+      return <Hero key={uniqueKey} data={block} locale={locale} />;
 
     case "blocks.section-heading":
-      return <SectionHeading key={uniqueKey} data={block} />;
+      return <SectionHeading key={uniqueKey} data={block} locale={locale} />;
 
     case "blocks.content-items":
-      return <Benefits key={uniqueKey} data={block} />;
+      return <Benefits key={uniqueKey} data={block} locale={locale}/>;
 
     case "blocks.yt-video":
-      return <Video key={uniqueKey} data={{ id: block.id, videoId: block.videoId }} />;
+      return <Video key={uniqueKey} data={{ id: block.id, videoId: block.videoId }} locale={locale} />;
 
     case "blocks.card-quote":
-      return <Testimonials key={uniqueKey} data={block} />;
+      return <Testimonials key={uniqueKey} data={block} locale={locale}/>;
 
     case "blocks.fa-qs":
-      return <Faq key={uniqueKey} data={block} />;
+      return <Faq key={uniqueKey} data={block} locale={locale}/>;
 
     case "blocks.cta":
-      return <Cta key={uniqueKey} data={block} />;
+      return <Cta key={uniqueKey} data={block} locale={locale}/>;
     default:
       return null;
   }
 }
 
 
-export default async function Home() {
-  const data = await loader();
+export default async function Home({
+  params: {locale}
+}: {
+  params : {locale:string}
+}) {
+  const data = await loader(locale);
   const blocks = data?.blocks;
   if (!blocks) {
     console.log("Blocks tidak ada")
@@ -118,7 +123,7 @@ export default async function Home() {
   };
   return (
     <Container>
-    {blocks.map((block: any, index: number) => blockRenderer(block, index))}
+    {blocks.map((block: any, index: number) => blockRenderer(block, index, locale))}
   </Container>
   );
 

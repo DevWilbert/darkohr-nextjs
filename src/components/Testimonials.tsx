@@ -20,6 +20,7 @@ interface TestimonialsProps {
     id: number;
     cards: CardProps[];
   };
+  locale:string
 }
 
 export function Testimonials({ data }: Readonly<TestimonialsProps>) {
