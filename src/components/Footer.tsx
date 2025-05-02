@@ -1,19 +1,24 @@
 import React from "react";
 import { SocialIcon } from "react-social-icons";
 import Link from "next/link";
-import Image from "next/image";
 import { Container } from "@/components/Container";
 import { getStrapiURL } from "@/lib/utils";
 import qs from "qs";
 import { StrapiImage } from "./StrapiImage";
+import { MapPin, Phone, Mail } from "lucide-react"; // Import ikon untuk kontak
 
-async function loader() {
+interface FooterProps {
+  locale: string;
+}
+
+async function loader(locale : string) {
   const { fetchData } = await import("@/lib/fetch");
 
   const path = "/api/global";
   const baseUrl = getStrapiURL();
 
   const query = qs.stringify({
+    locale : locale,
     populate: {
       footer: {
         populate: {
@@ -36,6 +41,10 @@ async function loader() {
                 populate: true,
               },
             },
+          },
+          // Menambahkan populate untuk data kontak
+          contactInfo: {
+            populate: true,
           },
         },
       },
@@ -81,6 +90,12 @@ interface FooterData {
       heading: string;
       socialLinks: SocialLink[];
     };
+    contactInfo: {
+      id: number;
+      address: string;
+      phone: string;
+      email: string;
+    };
   };
 }
 
@@ -90,6 +105,7 @@ interface SocialLink {
   text: string;
   external: boolean;
 }
+
 function iconSelect(link: SocialLink) {
   if (!link) return null;
   return (
@@ -101,21 +117,60 @@ function iconSelect(link: SocialLink) {
   );
 }
 
-export async function Footer() {
-  const data = await loader() as FooterData;
+// Komponen untuk informasi kontak
+const ContactInfo = ({ address, phone, email } : {address: string, phone: string, email : string}) => {
+  return (
+    <div className="mt-4 space-y-3 text-gray-500 dark:text-gray-400">
+      {address && (
+        <div className="flex items-start">
+          <MapPin className="w-5 h-5 mr-2 text-indigo-500 shrink-0" />
+          <span>{address}</span>
+        </div>
+      )}
+      {phone && (
+        <div className="flex items-center">
+          <Phone className="w-5 h-5 mr-2 text-indigo-500 shrink-0" />
+          <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-indigo-500">
+            {phone}
+          </a>
+        </div>
+      )}
+      {email && (
+        <div className="flex items-center">
+          <Mail className="w-5 h-5 mr-2 text-indigo-500 shrink-0" />
+          <a href={`mailto:${email}`} className="hover:text-indigo-500">
+            {email}
+          </a>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export async function Footer({locale}: FooterProps) {
+  const data = await loader(locale) as FooterData;
   if (!data.footer) return null;
   const footer = data.footer;
 
-  console.dir(footer, { depth: null });
   if (!data) return null;
 
-  const { logoLink, colOneLinks, colTwoLinks, socialLink, description } =
+  // Default kontak jika tidak ada di CMS
+  const defaultContact = {
+    address: "Jl. Example No. 123, Jakarta, Indonesia",
+    phone: "+62 123 4567 890",
+    email: "info@contoh.com"
+  };
+
+  const { logoLink, colOneLinks, colTwoLinks, socialLink, description, contactInfo = defaultContact } =
     footer;
+
   return (
-    <div className="relative">
+    <footer className="relative bg-white dark:bg-gray-900 pt-10">
       <Container>
-        <div className="grid max-w-screen-xl grid-cols-1 gap-10 pt-10 mx-auto mt-5 border-t border-gray-100 dark:border-trueGray-700 lg:grid-cols-5">
-          <div className="lg:col-span-2">
+        {/* Membuat grid yang lebih responsif */}
+        <div className="grid grid-cols-1 gap-8 pt-10 mx-auto mt-5 border-t border-gray-100 dark:border-trueGray-700 md:grid-cols-2 lg:grid-cols-12">
+          {/* Kolom logo dan deskripsi - lebih lebar pada desktop */}
+          <div className="md:col-span-2 lg:col-span-4">
             <div>
               <Link
                 href={logoLink.href}
@@ -136,30 +191,22 @@ export async function Footer() {
               {description}
             </div>
 
-            <div className="mt-5">
-              <a
-                href="https://vercel.com/?utm_source=web3templates&utm_campaign=oss"
-                target="_blank"
-                rel="noopener"
-                className="relative block w-44"
-              >
-                <Image
-                  src="/img/vercel.svg"
-                  alt="Powered by Vercel"
-                  width="212"
-                  height="44"
-                />
-              </a>
-            </div>
+            {/* Menambahkan informasi kontak di bawah deskripsi */}
+            <ContactInfo 
+              address={contactInfo.address} 
+              phone={contactInfo.phone} 
+              email={contactInfo.email} 
+            />
           </div>
 
-          <div>
+          {/* Kolom navigasi pertama */}
+          <div className="lg:col-span-2">
             <div className="flex flex-wrap w-full -mt-2 -ml-3 lg:ml-0">
               {colOneLinks &&
                 colOneLinks.map((item, index) => (
                   <Link
                     key={index}
-                    href={item.href}
+                    href={`/${locale}${item.href}`}
                     className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-trueGray-700"
                   >
                     {item.text}
@@ -167,22 +214,28 @@ export async function Footer() {
                 ))}
             </div>
           </div>
-          <div>
+
+          {/* Kolom navigasi kedua - memperbaiki link yang sebelumnya span */}
+          <div className="lg:col-span-2">
             <div className="flex flex-wrap w-full -mt-2 -ml-3 lg:ml-0">
               {colTwoLinks &&
                 colTwoLinks.map((item, index) => (
-                  <span
+                  <Link
                     key={index}
-                    // href={item.href}
+                    href={`/${locale}${item.href}`}
                     className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-trueGray-700"
                   >
                     {item.text}
-                  </span>
+                  </Link>
                 ))}
             </div>
           </div>
-          <div>
-            <div>{socialLink.heading}</div>
+
+          {/* Kolom social media */}
+          <div className="lg:col-span-4">
+            <div className="text-lg font-medium text-gray-700 dark:text-gray-200">
+              {socialLink.heading}
+            </div>
             <div className="flex mt-5 space-x-5 text-gray-400 dark:text-gray-500">
               {socialLink.socialLinks &&
                 socialLink.socialLinks.map((item, index) => (
@@ -195,54 +248,20 @@ export async function Footer() {
           </div>
         </div>
 
-        <div className="my-10 text-sm text-center text-gray-600 dark:text-gray-400">
+        {/* Copyright section */}
+        <div className="py-8 mt-10 text-sm text-center text-gray-600 border-t border-gray-100 dark:border-trueGray-700 dark:text-gray-400">
           Copyright © {new Date().getFullYear()}. Made with ♥ by{" "}
-          <a href="https://web3templates.com/" target="_blank" rel="noopener">
+          <a 
+            href="https://web3templates.com/" 
+            target="_blank" 
+            rel="noopener"
+            className="hover:text-indigo-500"
+          >
             Web3Templates.
           </a>{" "}
-          updated by{" "}
-          <a
-            href="https://youtube.com/c/codingafterthirty"
-            target="_blank"
-            rel="noopener"
-          >
-            Paul
-          </a>{" "}
-          Illustrations from{" "}
-          <a href="https://www.glazestock.com/" target="_blank" rel="noopener ">
-            Glazestock
-          </a>
+          Customized by DarkoHR
         </div>
       </Container>
-      {/* Do not remove this */}
-      <Backlink />
-    </div>
+    </footer>
   );
 }
-const Backlink = () => {
-  return (
-    <a
-      href="https://web3templates.com"
-      target="_blank"
-      rel="noopener"
-      className="absolute flex px-3 py-1 space-x-2 text-sm font-semibold text-gray-900 bg-white border border-gray-300 rounded shadow-sm place-items-center left-5 bottom-5 dark:bg-trueGray-900 dark:border-trueGray-700 dark:text-trueGray-300"
-    >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 30 30"
-        fill="none"
-        className="w-4 h-4"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect width="30" height="29.5385" rx="2.76923" fill="#362F78" />
-        <path
-          d="M10.14 21.94H12.24L15.44 12.18L18.64 21.94H20.74L24.88 8H22.64L19.58 18.68L16.36 8.78H14.52L11.32 18.68L8.24 8H6L10.14 21.94Z"
-          fill="#F7FAFC"
-        />
-      </svg>
-
-      <span>Web3Templates</span>
-    </a>
-  );
-};
