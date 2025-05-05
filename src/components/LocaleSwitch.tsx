@@ -2,24 +2,47 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Globe } from 'lucide-react'; // Import ikon globe untuk tampilan yang lebih interaktif
+import { Globe } from 'lucide-react';
 
 interface LocaleSwitchProps {
   currentLocale: string;
 }
 
+// Definisikan mapping path berdasarkan locale
+// Ini digunakan untuk menerjemahkan path antar bahasa
+const pathMappings: Record<string, Record<string, string>> = {
+  // Dari ID ke EN
+  'id': {
+    '/fitur': '/features',
+    '/tentang': '/about',
+    '/blog': '/blog',
+    '/support' : '/support',
+    '/docs': '/docs'
+    // tambahkan path lain yang perlu diterjemahkan
+  },
+  // Dari EN ke ID
+  'en': {
+    '/features': '/fitur',
+    '/about': '/tentang',
+    '/blog': '/blog',
+    '/support' : '/support',
+    '/docs': '/docs'
+    // tambahkan terjemahan path lain
+  }
+};
+
+const defaultLocale = 'id';
+
 const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [activeLocale, setActiveLocale] = useState(initialLocale);
-  const [isOpen, setIsOpen] = useState(false); // State untuk dropdown
+  const [isOpen, setIsOpen] = useState(false);
   
-  // Update internal state when prop changes
   useEffect(() => {
     setActiveLocale(initialLocale);
   }, [initialLocale]);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
       setIsOpen(false);
@@ -37,36 +60,55 @@ const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
   const handleLocaleChange = useCallback((newLocale: string) => {
     if (newLocale === activeLocale) return;
     
-    // Extract the path without locale
-    const pathWithoutLocale = pathname.replace(/^\/(id|en)/, '') || '/';
-    
-    // Set the new locale first
+    // Set active locale
     setActiveLocale(newLocale);
     
-    // Navigate to URL with new locale
-    const newPath = `/${newLocale}${pathWithoutLocale}`;
+    // Extract the current locale and path
+    const pathParts = pathname.split('/').filter(Boolean);
+    const currentLocale = ['id', 'en'].includes(pathParts[0]) ? pathParts[0] : defaultLocale;
     
-    // Force a hard navigation to ensure proper locale change
+    // Extract path without locale
+    let pathWithoutLocale = '';
+    
+    if (['id', 'en'].includes(pathParts[0])) {
+      // URL dengan locale explicit: /id/path atau /en/path
+      pathWithoutLocale = '/' + pathParts.slice(1).join('/');
+    } else {
+      // URL tanpa locale (clean URL): /path
+      pathWithoutLocale = pathname;
+    }
+    
+    // Check if we need to translate the path
+    let translatedPath = pathWithoutLocale;
+    if (currentLocale !== newLocale && pathMappings[currentLocale] && pathMappings[currentLocale][pathWithoutLocale]) {
+      translatedPath = pathMappings[currentLocale][pathWithoutLocale];
+    }
+    
+    // Construct the new URL
+    let newPath = '';
+    if (newLocale === defaultLocale) {
+      // For default locale, use clean URL
+      newPath = translatedPath;
+    } else {
+      // For other locales, add locale prefix
+      newPath = `/${newLocale}${translatedPath}`;
+    }
+    
+    // Force a hard navigation
     window.location.href = newPath;
-    
-    // Alternative approach using Next.js router (if the above doesn't work)
-    // router.push(newPath);
   }, [pathname, activeLocale]);
 
-  // Toggle dropdown
   const toggleDropdown = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent event bubbling
+    e.stopPropagation();
     setIsOpen(!isOpen);
   };
 
-  // Get locale full name
   const getLocaleName = (code: string) => {
     return code === 'id' ? 'Indonesia' : 'English';
   };
 
   return (
     <div className="relative">
-      {/* Interactive button with globe icon */}
       <button 
         className="flex items-center space-x-2 px-3 py-2 rounded-full transition-all duration-200 
                  bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700
@@ -79,7 +121,6 @@ const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
         <Globe className="w-4 h-4 text-indigo-500" />
         <span className="font-medium">{activeLocale.toUpperCase()}</span>
         
-        {/* Animated chevron */}
         <svg 
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : 'rotate-0'}`} 
           fill="none" 
@@ -91,7 +132,6 @@ const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
         </svg>
       </button>
 
-      {/* Dropdown menu with animation */}
       {isOpen && (
         <div 
           className="absolute right-0 mt-2 w-40 origin-top-right rounded-md shadow-lg overflow-hidden 
@@ -119,7 +159,6 @@ const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
                   <span>{getLocaleName(locale)}</span>
                 </span>
                 
-                {/* Check mark for active locale */}
                 {activeLocale === locale && (
                   <svg className="w-4 h-4 text-indigo-500" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" 
@@ -133,7 +172,6 @@ const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
         </div>
       )}
       
-      {/* Hidden native select for accessibility */}
       <select 
         className="sr-only"
         value={activeLocale}
