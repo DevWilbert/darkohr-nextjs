@@ -33,16 +33,26 @@ interface DisclosureClientProps {
   mobileExtras?: React.ReactNode;
 }
 
+
+
 export function DisclosureClient({ topnav, locale = '', mobileExtras }: Readonly<DisclosureClientProps>) {
   const navigation = topnav.link;
   const logo = topnav.logoLink;
   const cta = topnav.cta;
 
+  // Fungsi untuk membuat URL yang tepat berdasarkan locale
+  const createLocalizedHref = (path: string) => {
+    // Untuk locale default (id), gunakan path tanpa prefix
+    // Untuk locale lain (en), tambahkan prefix locale
+    return locale === 'id' ? path : `/${locale}${path}`
+  };
+
   return (
     <Disclosure>
       {({ open }) => (
         <div className="flex flex-wrap items-center justify-between w-full xl:w-auto">
-          <Link href={`/${locale}${logo.href}` || "/"}>
+          {/* <Link href={`/${locale}${logo.href}` || "/"}> */}
+          <Link href={createLocalizedHref(logo.href)}>
             <span className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
               <span>
                 <StrapiImage

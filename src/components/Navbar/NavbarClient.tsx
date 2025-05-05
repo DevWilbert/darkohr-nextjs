@@ -14,6 +14,13 @@ interface NavbarClientProps {
 export default function NavbarClient({ data, locale }: NavbarClientProps) {
   const navigation = data.topnav.link;
   const cta = data.topnav.cta;
+  
+  // Fungsi untuk membuat URL yang tepat berdasarkan locale
+  const createLocalizedHref = (path: string) => {
+    // Untuk locale default (id), gunakan path tanpa prefix
+    // Untuk locale lain (en), tambahkan prefix locale
+    return locale === 'id' ? path : `/${locale}${path}`
+  };
 
   return (
     <div className="w-full">
@@ -42,7 +49,7 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
             {navigation.map((menu, index) => (
               <li className="mr-3 nav__item" key={index}>
                 <Link
-                  href={`/${locale}${menu.href}`}
+                  href={createLocalizedHref(menu.href)}
                   className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-gray-800"
                 >
                   {menu.text}
@@ -55,7 +62,7 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
         {/* Desktop CTA, LocaleSwitch & ThemeChanger - tampil hanya di ukuran xl ke atas */}
         <div className="hidden mr-3 space-x-4 xl:flex nav__item">
           <Link
-            href={`/${locale}${cta.href}`}
+            href={createLocalizedHref(cta.href)}
             className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"
             target={cta.external ? "_blank" : "_self"}
           >
