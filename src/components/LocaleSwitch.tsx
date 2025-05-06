@@ -35,7 +35,7 @@ const defaultLocale = 'id';
 
 const LocaleSwitch = ({ currentLocale: initialLocale }: LocaleSwitchProps) => {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname()  || '/';
   const [activeLocale, setActiveLocale] = useState(initialLocale);
   const [isOpen, setIsOpen] = useState(false);
   
