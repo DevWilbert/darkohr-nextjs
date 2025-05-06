@@ -62,7 +62,7 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
         {/* Desktop CTA, LocaleSwitch & ThemeChanger - tampil hanya di ukuran xl ke atas */}
         <div className="hidden mr-3 space-x-4 xl:flex nav__item">
           <Link
-            href={createLocalizedHref(cta.href)}
+            href={cta.href}
             className="px-6 py-2 text-white bg-indigo-600 rounded-md md:ml-5"
             target={cta.external ? "_blank" : "_self"}
           >

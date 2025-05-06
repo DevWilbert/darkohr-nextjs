@@ -164,6 +164,13 @@ export async function Footer({locale}: FooterProps) {
   const { logoLink, colOneLinks, colTwoLinks, socialLink, description, contactInfo = defaultContact } =
     footer;
 
+  // Fungsi untuk membuat URL yang tepat berdasarkan locale
+  const createLocalizedHref = (path: string) => {
+    // Untuk locale default (id), gunakan path tanpa prefix
+    // Untuk locale lain (en), tambahkan prefix locale
+    return locale === 'id' ? path : `/${locale}${path}`
+  };
+
   return (
     <footer className="relative bg-white dark:bg-gray-900 pt-10">
       <Container>
@@ -173,7 +180,7 @@ export async function Footer({locale}: FooterProps) {
           <div className="md:col-span-2 lg:col-span-4">
             <div>
               <Link
-                href={logoLink.href}
+                href={createLocalizedHref(logoLink.href)}
                 className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100"
               >
                 <StrapiImage
@@ -206,7 +213,7 @@ export async function Footer({locale}: FooterProps) {
                 colOneLinks.map((item, index) => (
                   <Link
                     key={index}
-                    href={`/${locale}${item.href}`}
+                    href={createLocalizedHref(item.href)}
                     className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-trueGray-700"
                   >
                     {item.text}
@@ -222,7 +229,7 @@ export async function Footer({locale}: FooterProps) {
                 colTwoLinks.map((item, index) => (
                   <Link
                     key={index}
-                    href={`/${locale}${item.href}`}
+                    href={createLocalizedHref(item.href)}
                     className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-trueGray-700"
                   >
                     {item.text}

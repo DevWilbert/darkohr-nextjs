@@ -15,7 +15,7 @@ const pathMappings: Record<string, Record<string, string>> = {
   'id': {
     '/fitur': '/features',
     '/tentang': '/about',
-    '/blog': '/blog',
+    '/blog': '/blogs',
     '/support' : '/support',
     '/docs': '/docs'
     // tambahkan path lain yang perlu diterjemahkan
@@ -24,7 +24,7 @@ const pathMappings: Record<string, Record<string, string>> = {
   'en': {
     '/features': '/fitur',
     '/about': '/tentang',
-    '/blog': '/blog',
+    '/blogs': '/blog',
     '/support' : '/support',
     '/docs': '/docs'
     // tambahkan terjemahan path lain
