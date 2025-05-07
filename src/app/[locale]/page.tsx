@@ -26,6 +26,9 @@ async function loader(locale: string) {
               cta: true,
               image: {
                 fields: ['url', 'alternativeText', 'name']
+              },
+              image_dark: {
+                fields: ['url', 'alternativeText', 'name']
               }
             }
           },
