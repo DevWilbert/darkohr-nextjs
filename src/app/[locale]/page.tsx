@@ -1,6 +1,7 @@
 import { Container } from "@/components/Container";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
+import { LogoCarousel } from "@/components/LogoCarousel";
 import { Benefits } from "@/components/Benefits";
 import { ContentWithImage } from "@/components/ContentWithImage";
 import { Video } from "@/components/Video";
@@ -34,6 +35,17 @@ async function loader(locale: string) {
           },
           'blocks.section-heading': {
             populate: '*'
+          },
+          'blocks.logo-carousel': {
+            populate: {
+              logoItems: {
+                populate: {
+                  image: {
+                    fields: ['url', 'alternativeText', 'name']
+                  }
+                }
+              }
+            }
           },
           'blocks.content-items': {
             populate: {
@@ -78,11 +90,11 @@ async function loader(locale: string) {
   url.search = query;
 
   const data = await fetchData(url.href);
-  console.log("Fetching : ",data);
+  console.log("Fetching : ", data);
   return data;
 }
 
-function blockRenderer(block: any, index: number, locale:string) {
+function blockRenderer(block: any, index: number, locale: string) {
 
   const uniqueKey = `${block.id}-${index}`;
 
@@ -93,20 +105,23 @@ function blockRenderer(block: any, index: number, locale:string) {
     case "blocks.section-heading":
       return <SectionHeading key={uniqueKey} data={block} locale={locale} />;
 
+    case "blocks.logo-carousel":
+      return <LogoCarousel key={uniqueKey} data={block}></LogoCarousel>
+
     case "blocks.content-items":
-      return <Benefits key={uniqueKey} data={block} locale={locale}/>;
+      return <Benefits key={uniqueKey} data={block} locale={locale} />;
 
     case "blocks.yt-video":
       return <Video key={uniqueKey} data={{ id: block.id, videoId: block.videoId }} locale={locale} />;
 
     case "blocks.card-quote":
-      return <Testimonials key={uniqueKey} data={block} locale={locale}/>;
+      return <Testimonials key={uniqueKey} data={block} locale={locale} />;
 
     case "blocks.fa-qs":
-      return <Faq key={uniqueKey} data={block} locale={locale}/>;
+      return <Faq key={uniqueKey} data={block} locale={locale} />;
 
     case "blocks.cta":
-      return <Cta key={uniqueKey} data={block} locale={locale}/>;
+      return <Cta key={uniqueKey} data={block} locale={locale} />;
     default:
       return null;
   }
@@ -114,9 +129,9 @@ function blockRenderer(block: any, index: number, locale:string) {
 
 
 export default async function Home({
-  params: {locale}
+  params: { locale }
 }: {
-  params : {locale:string}
+  params: { locale: string }
 }) {
   const data = await loader(locale);
   const blocks = data?.blocks;
@@ -126,8 +141,8 @@ export default async function Home({
   };
   return (
     <Container>
-    {blocks.map((block: any, index: number) => blockRenderer(block, index, locale))}
-  </Container>
+      {blocks.map((block: any, index: number) => blockRenderer(block, index, locale))}
+    </Container>
   );
 
 }
