@@ -1,5 +1,6 @@
 import React from "react";
 import { Container } from "@/components/Container";
+import { Caveat } from "next/font/google";
 
 interface SectionHeadingProps {
   data: {
@@ -11,6 +12,11 @@ interface SectionHeadingProps {
   locale: string;
 }
 
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["700"],
+});
+
 export function SectionHeading({ data }: Readonly<SectionHeadingProps>) {
   if (!data) return null;
   const { preHeading, heading, text } = data;
@@ -18,13 +24,13 @@ export function SectionHeading({ data }: Readonly<SectionHeadingProps>) {
   return (
     <Container className="flex w-full flex-col mt-4 items-center justify-center text-center ">
       {preHeading && (
-        <div className="text-sm font-bold tracking-wider text-indigo-600 uppercase">
+        <div className="text-sm font-bold tracking-wider text-[#FB4D46] uppercase">
           {preHeading}
         </div>
       )}
 
       {heading && (
-        <h2 className="max-w-2xl mt-3 text-3xl font-bold leading-snug tracking-tight text-gray-800 lg:leading-tight lg:text-4xl dark:text-white">
+        <h2 className={`${caveat.className} max-w-2xl mt-3 text-3xl font-bold leading-snug tracking-tight text-gray-800 lg:leading-tight lg:text-4xl dark:text-white`}>
           {heading}
         </h2>
       )}
