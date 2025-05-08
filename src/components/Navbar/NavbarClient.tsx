@@ -23,7 +23,7 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full relative z-50">
       <nav className="container relative flex flex-wrap items-center justify-between p-8 mx-auto lg:justify-between xl:px-0">
         {/* Logo dan Mobile/Tablet Menu */}
         <DisclosureClient
@@ -31,11 +31,11 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
           locale={locale}
           mobileExtras={
             <>
-              <div className="flex flex-col gap-4 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex justify-between items-center">
-                  <LocaleSwitch currentLocale={locale} />
+              <div className="flex flex-col gap-4 mt-6 pt-6 dark:border-gray-700">
+                <div className="flex justify-start items-center">
+                  <ThemeChanger />
                   <div className="ml-4">
-                    <ThemeChanger />
+                    <LocaleSwitch currentLocale={locale} />
                   </div>
                 </div>
               </div>
