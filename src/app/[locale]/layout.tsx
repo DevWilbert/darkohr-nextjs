@@ -43,7 +43,7 @@ export default function RootLayout({
           <Navbar locale={locale}/>
           <div>{children}</div>
           <Footer locale={locale} />
-          <PopupWidget />
+          {/* <PopupWidget /> */}
         </ThemeProvider>
       </body>
     </html>

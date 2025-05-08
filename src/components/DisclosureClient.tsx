@@ -9,6 +9,9 @@ import {
 
 import Link from "next/link";
 import { StrapiImage } from "./StrapiImage";
+import { useEffect } from "react";
+import ThemeChanger from "./DarkSwitch";
+import LocaleSwitch from "./LocaleSwitch";
 
 interface LinkProps {
   text: string;
@@ -31,10 +34,9 @@ interface DisclosureClientProps {
     cta: LinkProps;
   };
   locale?: string;
-  mobileExtras?: React.ReactNode;
 }
 
-export function DisclosureClient({ topnav, locale = 'id', mobileExtras }: Readonly<DisclosureClientProps>) {
+export function DisclosureClient({ topnav, locale = 'id' }: Readonly<DisclosureClientProps>) {
   const navigation = topnav.link;
   const logo = topnav.logoLink;
   const cta = topnav.cta;
@@ -48,98 +50,127 @@ export function DisclosureClient({ topnav, locale = 'id', mobileExtras }: Readon
 
   return (
     <Disclosure>
-      {({ open, close }) => (
-        <div className="flex flex-wrap items-center justify-between w-full xl:w-auto">
-          <Link href={createLocalizedHref(logo.href)}>
-            <span className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
-              <span>
-                <StrapiImage
-                  src={logo.image.url}
-                  alt={logo.image.alternativeText || logo.image.name}
-                  width={32}
-                  height={32}
-                  className="w-8"
-                />
+      {({ open, close }) => {
+        // Add effect to prevent body scrolling when menu is open
+        useEffect(() => {
+          if (open) {
+            // Disable scroll on body
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100%';
+          } else {
+            // Re-enable scroll on body
+            document.body.style.overflow = '';
+            document.body.style.height = '';
+          }
+
+          // Cleanup function to ensure scroll is re-enabled when component unmounts
+          return () => {
+            document.body.style.overflow = '';
+            document.body.style.height = '';
+          };
+        }, [open]);
+
+        return (
+          <div className="flex flex-wrap items-center justify-between w-full xl:w-auto">
+            <Link href={createLocalizedHref(logo.href)}>
+              <span className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100">
+                <span>
+                  <StrapiImage
+                    src={logo.image.url}
+                    alt={logo.image.alternativeText || logo.image.name}
+                    width={32}
+                    height={32}
+                    className="w-8"
+                  />
+                </span>
+                <span>{logo.text}</span>
               </span>
-              <span>{logo.text}</span>
-            </span>
-          </Link>
+            </Link>
 
-          {/* Hamburger button for mobile and tablet (xl breakpoint and below) */}
-          <DisclosureButton
-            aria-label="Toggle Menu"
-            className="px-2 py-1 ml-auto text-gray-500 rounded-md xl:hidden focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700"
-          >
-            <svg
-              className="w-6 h-6 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
+            {/* Hamburger button for mobile and tablet (xl breakpoint and below) */}
+            <DisclosureButton
+              aria-label="Toggle Menu"
+              className="px-2 py-1 ml-auto text-gray-500 rounded-md xl:hidden focus:outline-none dark:text-gray-300 dark:focus:bg-trueGray-700 z-50"
             >
-              {open && (
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
-                />
-              )}
-              {!open && (
-                <path
-                  fillRule="evenodd"
-                  d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-                />
-              )}
-            </svg>
-          </DisclosureButton>
+              <svg
+                className="w-6 h-6 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+              >
+                {open && (
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
+                  />
+                )}
+                {!open && (
+                  <path
+                    fillRule="evenodd"
+                    d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+                  />
+                )}
+              </svg>
+            </DisclosureButton>
 
-          {/* Use Transition component for smooth animations */}
-          <Transition
-            show={open}
-            enter="transition duration-300 ease-out"
-            enterFrom="transform opacity-0 -translate-y-3"
-            enterTo="transform opacity-100 translate-y-0"
-            leave="transition duration-300 ease-in"
-            leaveFrom="transform opacity-100 translate-y-0"
-            leaveTo="transform opacity-0 -translate-y-3"
-          >
-            <div className="absolute top-full left-0 right-0 z-50 pt-2 w-full bg-white dark:bg-gray-900 shadow-lg xl:hidden">
-              <DisclosurePanel className="w-full">
-                <div className="flex flex-col space-y-4 px-6 pb-5 max-h-[70vh]">
-                  <Link
-                    href={locale == 'id' ? '/' : '/en'}
-                    className="py-2 text-lg text-gray-700 dark:text-gray-300 focus:outline-none border-b border-gray-300"
-                    onClick={() => close()} // Close menu when nav link is clicked
-                  >
-                    Home
-                  </Link>
-                  {navigation.map((item, index) => (
-                    <Link
-                      key={index}
-                      href={createLocalizedHref(item.href)}
-                      className="py-2 text-lg text-gray-700 dark:text-gray-300 focus:outline-none border-b border-gray-300"
-                      onClick={() => close()} // Close menu when nav link is clicked
-                    >
-                      {item.text}
-                    </Link>
-                  ))}
-                  <Link
-                    href={createLocalizedHref(cta.href)}
-                    target={cta.external ? "_blank" : "_self"}
-                    className="w-full px-6 py-3 mt-2 text-center text-white bg-[#FB4D46] rounded-md"
-                    onClick={() => close()} // Close menu when CTA button is clicked
-                  >
-                    {cta.text}
-                  </Link>
+            {/* Full screen mobile menu with transition */}
+            <Transition
+              show={open}
+              enter="transition duration-300 ease-out"
+              enterFrom="transform opacity-0"
+              enterTo="transform opacity-100"
+              leave="transition duration-200 ease-in"
+              leaveFrom="transform opacity-100"
+              leaveTo="transform opacity-0"
+            >
+              <div className="fixed inset-0 z-40 bg-white dark:bg-gray-900 xl:hidden">
+                <DisclosurePanel static className="w-full h-full">
+                  <div className="flex flex-col px-6 pt-20 pb-5 h-full overflow-hidden">
+                    <div className="flex-1 overflow-y-auto">
+                      <Link
+                        href={locale == 'id' ? '/' : '/en'}
+                        className="block py-4 text-xl text-gray-700 dark:text-gray-300 focus:outline-none border-b border-gray-300"
+                        onClick={() => close()} // Close menu when nav link is clicked
+                      >
+                        Home
+                      </Link>
+                      {navigation.map((item, index) => (
+                        <Link
+                          key={index}
+                          href={createLocalizedHref(item.href)}
+                          className="block py-4 text-xl text-gray-700 dark:text-gray-300 focus:outline-none border-b border-gray-300"
+                          onClick={() => close()} // Close menu when nav link is clicked
+                        >
+                          {item.text}
+                        </Link>
+                      ))}
+                      <Link
+                        href={createLocalizedHref(cta.href)}
+                        target={cta.external ? "_blank" : "_self"}
+                        className="block w-full px-6 py-4 mt-4 text-center text-white bg-[#FB4D46] rounded-md"
+                        onClick={() => close()} // Close menu when CTA button is clicked
+                      >
+                        {cta.text}
+                      </Link>
 
-                  {/* Display additional content (LocaleSwitch and ThemeChanger) on mobile and tablet */}
-                  <div onClick={(e) => e.stopPropagation()}>
-                    {mobileExtras}
+                      {/* LocaleSwitch and ThemeChanger */}
+                      <div className="flex flex-col gap-4 pt-6 dark:border-gray-700">
+                        <div className="flex justify-end items-center">
+                          <ThemeChanger />
+                          <div className="ml-4">
+                            <LocaleSwitch currentLocale={locale} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
-                </div>
-              </DisclosurePanel>
-            </div>
-          </Transition>
-        </div>
-      )}
+                </DisclosurePanel>
+              </div>
+            </Transition>
+          </div>
+        );
+      }}
     </Disclosure>
   );
 }

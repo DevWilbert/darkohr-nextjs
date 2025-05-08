@@ -54,18 +54,6 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
           <DisclosureClient
             topnav={data.topnav}
             locale={locale}
-            mobileExtras={
-              <>
-                <div className="flex flex-col gap-4 mt-6 pt-6 dark:border-gray-700">
-                  <div className="flex justify-start items-center">
-                    <ThemeChanger />
-                    <div className="ml-4">
-                      <LocaleSwitch currentLocale={locale} />
-                    </div>
-                  </div>
-                </div>
-              </>
-            }
           />
 
           {/* nav menu - tampil hanya di ukuran xl ke atas */}
