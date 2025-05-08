@@ -1,6 +1,7 @@
 'use client'
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ThemeChanger from "../DarkSwitch";
 import { DisclosureClient } from "@/components/DisclosureClient";
 import LocaleSwitch from "../LocaleSwitch";
@@ -15,6 +16,29 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
   const navigation = data.topnav.link;
   const cta = data.topnav.cta;
 
+  // State untuk tracking scroll position
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Fungsi untuk menangani peristiwa scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      // Jika scroll posisi > 10px, set isScrolled true
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    // Tambahkan event listener untuk scroll
+    window.addEventListener("scroll", handleScroll);
+
+    // Bersihkan event listener ketika component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   // Fungsi untuk membuat URL yang tepat berdasarkan locale
   const createLocalizedHref = (path: string) => {
     // Untuk locale default (id), gunakan path tanpa prefix
@@ -23,58 +47,61 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
   };
 
   return (
-    <div className="w-full relative z-50">
-      <nav className="container relative flex flex-wrap items-center justify-between p-8 mx-auto lg:justify-between xl:px-0">
-        {/* Logo dan Mobile/Tablet Menu */}
-        <DisclosureClient
-          topnav={data.topnav}
-          locale={locale}
-          mobileExtras={
-            <>
-              <div className="flex flex-col gap-4 mt-6 pt-6 dark:border-gray-700">
-                <div className="flex justify-start items-center">
-                  <ThemeChanger />
-                  <div className="ml-4">
-                    <LocaleSwitch currentLocale={locale} />
+    <div className={`w-full z-50 ${isScrolled ? 'fixed top-0 left-0 right-0' : ''}`}>
+      <div className={`${isScrolled ? 'bg-white dark:bg-trueGray-900 shadow-md dark:shadow-[0_0_4px_rgba(59,130,246,0.6)] dark:border-gray-800' : ''} transition-all duration-300`}>
+        <nav className={`container relative flex flex-wrap items-center justify-between ${isScrolled ? 'p-6' : 'p-8'} mx-auto lg:justify-between xl:px-0 transition-all duration-300`}>
+          {/* Logo dan Mobile/Tablet Menu */}
+          <DisclosureClient
+            topnav={data.topnav}
+            locale={locale}
+            mobileExtras={
+              <>
+                <div className="flex flex-col gap-4 mt-6 pt-6 dark:border-gray-700">
+                  <div className="flex justify-start items-center">
+                    <ThemeChanger />
+                    <div className="ml-4">
+                      <LocaleSwitch currentLocale={locale} />
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          }
-        />
+              </>
+            }
+          />
 
-        {/* nav menu - tampil hanya di ukuran xl ke atas */}
-        <div className="hidden text-center xl:flex xl:items-center">
-          <ul className="items-center justify-end flex-1 pt-6 list-none xl:pt-0 xl:flex">
-            {navigation.map((menu, index) => (
-              <li className="mr-3 nav__item" key={index}>
-                <Link
-                  href={createLocalizedHref(menu.href)}
-                  className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-500 outline-none focus:outline-none dark:focus:bg-transparent focus:bg-transparent relative group"
-                >
-                  {menu.text}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FB4D46] transition-all duration-300 group-hover:w-full"></span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+          {/* nav menu - tampil hanya di ukuran xl ke atas */}
+          <div className="hidden text-center xl:flex xl:items-center">
+            <ul className="items-center justify-end flex-1 pt-6 list-none xl:pt-0 xl:flex">
+              {navigation.map((menu, index) => (
+                <li className="mr-3 nav__item" key={index}>
+                  <Link
+                    href={createLocalizedHref(menu.href)}
+                    className="inline-block px-4 py-2 text-lg font-normal text-gray-800 no-underline rounded-md dark:text-gray-200 hover:text-indigo-500 dark:hover:text-indigo-500 outline-none focus:outline-none dark:focus:bg-transparent focus:bg-transparent relative group"
+                  >
+                    {menu.text}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FB4D46] transition-all duration-300 group-hover:w-full"></span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-        {/* CTA, LocaleSwitch & ThemeChanger - tampil hanya di ukuran xl ke atas */}
-        <div className="hidden mr-3 space-x-4 xl:flex nav__item">
+          {/* CTA, LocaleSwitch & ThemeChanger - tampil hanya di ukuran xl ke atas */}
+          <div className="hidden mr-3 space-x-4 xl:flex nav__item">
 
-          <Link
-            href={cta.href}
-            className="group relative px-6 py-2 text-[#FB4D46] border-2 border-[#FB4D46] rounded-md md:ml-5 inline-flex items-center overflow-hidden transition-colors duration-300"
-            target={cta.external ? "_blank" : "_self"}
-          >
-            <span className="absolute inset-0 w-0 bg-[#FB4D46] transition-all duration-300 ease-out group-hover:w-full"></span>
-            <span className="relative z-10 group-hover:text-white transition-colors duration-300">{cta.text}</span>
-          </Link>
-          <LocaleSwitch currentLocale={locale} />
-          <ThemeChanger />
-        </div>
-      </nav>
+            <Link
+              href={cta.href}
+              className="group relative px-6 py-2 text-[#FB4D46] border-2 border-[#FB4D46] rounded-md md:ml-5 inline-flex items-center overflow-hidden transition-colors duration-300"
+              target={cta.external ? "_blank" : "_self"}
+            >
+              <span className="absolute inset-0 w-0 bg-[#FB4D46] transition-all duration-300 ease-out group-hover:w-full"></span>
+              <span className="relative z-10 group-hover:text-white transition-colors duration-300">{cta.text}</span>
+            </Link>
+            <LocaleSwitch currentLocale={locale} />
+            <ThemeChanger />
+          </div>
+        </nav>
+      </div>
+
     </div>
   );
 }

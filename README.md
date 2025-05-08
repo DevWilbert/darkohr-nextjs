@@ -22,7 +22,7 @@ DarkoHR Landing Page adalah halaman utama untuk memperkenalkan aplikasi Human Re
 ```bash
 # Clone repository
 git clone https://github.com/DevWilbert/darkohr-nextjs.git
-cd darkohr-landing
+cd darkohr-nextjs
 
 # Install dependencies
 npm install
