@@ -49,7 +49,7 @@ export default function NavbarClient({ data, locale }: NavbarClientProps) {
   return (
     <div className={`w-full z-50 ${isScrolled ? 'fixed top-0 left-0 right-0' : ''}`}>
       <div className={`${isScrolled ? 'bg-white dark:bg-trueGray-900 shadow-md dark:shadow-[0_0_4px_rgba(59,130,246,0.6)] dark:border-gray-800' : ''} transition-all duration-300`}>
-        <nav className={`container relative flex flex-wrap items-center justify-between ${isScrolled ? 'p-6' : 'p-8'} mx-auto lg:justify-between xl:px-0 transition-all duration-300`}>
+        <nav className={`container relative flex flex-wrap items-center justify-between ${isScrolled ? 'p-3' : 'p-8'} mx-auto lg:justify-between xl:px-0 transition-all duration-300`}>
           {/* Logo dan Mobile/Tablet Menu */}
           <DisclosureClient
             topnav={data.topnav}

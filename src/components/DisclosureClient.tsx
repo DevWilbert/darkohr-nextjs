@@ -83,7 +83,7 @@ export function DisclosureClient({ topnav, locale = 'id' }: Readonly<DisclosureC
                     className="w-8"
                   />
                 </span>
-                <span>{logo.text}</span>
+                <span className="text-[#FB4D46]">{logo.text}</span>
               </span>
             </Link>
 
