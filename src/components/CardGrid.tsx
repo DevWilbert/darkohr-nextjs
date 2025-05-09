@@ -121,7 +121,7 @@ const Card = ({ card }: { card: CardData }) => {
                 md:bg-transparent md:dark:bg-transparent
                 bg-white dark:bg-trueGray-900
                 hover:bg-white dark:hover:bg-trueGray-800 hover:shadow-xl hover:scale-[1.02]
-                border md:border-transparent border-gray-100
+                border border-gray-300 lg:border-transparent
                 hover:border-gray-100 dark:hover:border-gray-700"
         >
             <div className="mb-4">
