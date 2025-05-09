@@ -2,13 +2,13 @@ import React from "react";
 import Image from "next/image";
 import { Container } from "@/components/Container";
 
-import { CheckIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, MapPinIcon } from "@heroicons/react/20/solid";
 import { StrapiImage } from "./StrapiImage";
 
 function iconSelect(iconKey: string) {
   switch (iconKey) {
     case "CHECK":
-      return <CheckIcon className="w-7 h-7 text-indigo-50" />;
+      return <MapPinIcon className="w-7 h-7 text-indigo-50" />;
     default:
       return null;
   }

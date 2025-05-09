@@ -195,7 +195,7 @@ export function LogoCarousel({ data, visibleCount = 6, interval = 3000 }: Readon
   return (
     // Ukuran Gambar di Strapi Harus 512 x 256 
     // Atur grid-cols untuk mau nampilkan berapa logo
-    <div className="w-full flex justify-center my-8">
+    <div className="w-full flex justify-center mt-8 mb-[100px]">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 items-center">
         {visibleLogos.map((logoItem, index) => (
           <div 

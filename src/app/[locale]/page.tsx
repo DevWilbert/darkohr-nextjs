@@ -2,8 +2,9 @@ import { Container } from "@/components/Container";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { LogoCarousel } from "@/components/LogoCarousel";
+import CardGrid from "@/components/CardGrid";
 import { Benefits } from "@/components/Benefits";
-import { ContentWithImage } from "@/components/ContentWithImage";
+// import { ContentWithImage } from "@/components/ContentWithImage";
 import { Video } from "@/components/Video";
 import { Testimonials } from "@/components/Testimonials";
 import { Faq } from "@/components/Faq";
@@ -44,6 +45,13 @@ async function loader(locale: string) {
                     fields: ['url', 'alternativeText', 'name']
                   }
                 }
+              }
+            }
+          },
+          'blocks.why-choose-us': {
+            populate: {
+              cards: {
+                populate: '*'
               }
             }
           },
@@ -107,6 +115,9 @@ function blockRenderer(block: any, index: number, locale: string) {
 
     case "blocks.logo-carousel":
       return <LogoCarousel key={uniqueKey} data={block}></LogoCarousel>
+
+    case "blocks.why-choose-us":
+       return <CardGrid key={uniqueKey} data={block}></CardGrid>
 
     case "blocks.content-items":
       return <Benefits key={uniqueKey} data={block} locale={locale} />;
