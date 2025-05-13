@@ -79,3 +79,5 @@ export const FeaturePage: React.FC<FeaturePageProps> = async ({ locale }) => {
     </Container>
   );
 };
+
+export default FeaturePage;
