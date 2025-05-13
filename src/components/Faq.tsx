@@ -19,9 +19,10 @@ interface FaqProps {
 }
 
 export function Faq({ data }: FaqProps) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  
   if (!data) return null;
   const questions = data.questions;
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
   
   const toggleQuestion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -71,4 +72,3 @@ export function Faq({ data }: FaqProps) {
     </Container>
   );
 }
-
