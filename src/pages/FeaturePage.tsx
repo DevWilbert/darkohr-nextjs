@@ -58,7 +58,7 @@ function blockRenderer(block: any, index: number, locale:string) {
   }
 }
 
-export const FeaturePage: React.FC<FeaturePageProps> = async ({ locale }) => {
+const FeaturePage = async ({ locale }: FeaturePageProps) => {
   // Ambil data dari API
   const data = await loader(locale);
   const blocks = data?.blocks;
