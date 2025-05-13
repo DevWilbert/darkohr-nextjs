@@ -106,16 +106,6 @@ interface SocialLink {
   external: boolean;
 }
 
-function iconSelect(link: SocialLink) {
-  if (!link) return null;
-  return (
-    <SocialIcon
-      network={link.text.toLocaleLowerCase()}
-      url={link.href}
-      target="_blank"
-    />
-  );
-}
 
 // Komponen untuk informasi kontak
 const ContactInfo = ({ address, phone, email } : {address: string, phone: string, email : string}) => {
@@ -130,17 +120,17 @@ const ContactInfo = ({ address, phone, email } : {address: string, phone: string
       {phone && (
         <div className="flex items-center">
           <Phone className="w-5 h-5 mr-2 text-indigo-500 shrink-0" />
-          <a href={`tel:${phone.replace(/\s+/g, '')}`} className="hover:text-indigo-500">
+          <span >
             {phone}
-          </a>
+          </span>
         </div>
       )}
       {email && (
         <div className="flex items-center">
           <Mail className="w-5 h-5 mr-2 text-indigo-500 shrink-0" />
-          <a href={`mailto:${email}`} className="hover:text-indigo-500">
+          <span >
             {email}
-          </a>
+          </span>
         </div>
       )}
     </div>
@@ -175,13 +165,13 @@ export async function Footer({locale}: FooterProps) {
     <footer className="relative bg-white dark:bg-gray-900 pt-10">
       <Container>
         {/* Membuat grid yang lebih responsif */}
-        <div className="grid grid-cols-1 gap-8 pt-10 mx-auto mt-5 border-t border-gray-100 dark:border-trueGray-700 md:grid-cols-2 lg:grid-cols-12">
+        <div className="grid grid-cols-1 gap-8 pt-10 mx-auto mt-5 border-t border-gray-300 dark:border-trueGray-700 md:grid-cols-2 lg:grid-cols-12">
           {/* Kolom logo dan deskripsi - lebih lebar pada desktop */}
           <div className="md:col-span-2 lg:col-span-4">
             <div>
               <Link
                 href={createLocalizedHref(logoLink.href)}
-                className="flex items-center space-x-2 text-2xl font-medium text-indigo-500 dark:text-gray-100"
+                className="flex items-center space-x-2 text-2xl font-medium text-[#FB4D46] dark:text-[#FB4D46]"
               >
                 <StrapiImage
                   src={logoLink.image.url}
@@ -214,7 +204,7 @@ export async function Footer({locale}: FooterProps) {
                   <Link
                     key={index}
                     href={createLocalizedHref(item.href)}
-                    className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-trueGray-700"
+                    className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-[#FB4D46] dark:hover:text-[#FB4D46]"
                   >
                     {item.text}
                   </Link>
@@ -230,7 +220,7 @@ export async function Footer({locale}: FooterProps) {
                   <Link
                     key={index}
                     href={createLocalizedHref(item.href)}
-                    className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-indigo-500 focus:text-indigo-500 focus:bg-indigo-100 focus:outline-none dark:focus:bg-trueGray-700"
+                    className="w-full px-4 py-2 text-gray-500 rounded-md dark:text-gray-300 hover:text-[#FB4D46] dark:hover:text-[#FB4D46]"
                   >
                     {item.text}
                   </Link>
@@ -238,7 +228,7 @@ export async function Footer({locale}: FooterProps) {
             </div>
           </div>
 
-          {/* Kolom social media */}
+          {/* Kolom social media - dengan perbaikan untuk ikon yang terpotong */}
           <div className="lg:col-span-4">
             <div className="text-lg font-medium text-gray-700 dark:text-gray-200">
               {socialLink.heading}
@@ -246,9 +236,14 @@ export async function Footer({locale}: FooterProps) {
             <div className="flex mt-5 space-x-5 text-gray-400 dark:text-gray-500">
               {socialLink.socialLinks &&
                 socialLink.socialLinks.map((item, index) => (
-                  <div key={index}>
+                  <div key={index} className="h-10 w-10 flex items-center justify-center">
                     <span className="sr-only">{item.text}</span>
-                    {iconSelect(item)}
+                    <SocialIcon 
+                      network={item.text.toLowerCase()}
+                      url={item.href}
+                      target="_blank"
+                      style={{ height: 40, width: 40 }}
+                    />
                   </div>
                 ))}
             </div>
@@ -256,17 +251,8 @@ export async function Footer({locale}: FooterProps) {
         </div>
 
         {/* Copyright section */}
-        <div className="py-8 mt-10 text-sm text-center text-gray-600 border-t border-gray-100 dark:border-trueGray-700 dark:text-gray-400">
-          Copyright © {new Date().getFullYear()}. Made with ♥ by{" "}
-          <a 
-            href="https://web3templates.com/" 
-            target="_blank" 
-            rel="noopener"
-            className="hover:text-indigo-500"
-          >
-            Web3Templates.
-          </a>{" "}
-          Customized by DarkoHR
+        <div className="py-8 mt-10 text-sm text-center text-gray-600 border-t border-gray-300 dark:border-trueGray-700 dark:text-gray-400">
+          Copyright © {new Date().getFullYear()}. Made with ♥ by{" "} DarkoHR
         </div>
       </Container>
     </footer>
