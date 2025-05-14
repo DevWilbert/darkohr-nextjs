@@ -65,10 +65,9 @@ interface BenefitProps {
       heading: string;
     }[];
   };
-  locale: string;
 }
 
-export function Benefits({ data, locale }: BenefitProps) {
+export function Benefits({ data }: BenefitProps) {
   const { heading, text, image, items, imageRight } = data;
 
   return (

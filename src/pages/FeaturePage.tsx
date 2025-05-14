@@ -44,14 +44,14 @@ async function loader(locale: string) {
   }
 }
 
-function blockRenderer(block: any, index: number, locale:string) {
+function blockRenderer(block: any, index: number) {
 
   const uniqueKey = `${block.id}-${index}`;
 
   switch (block.__component) {
 
     case "blocks.section-heading":
-      return <SectionHeading key={uniqueKey} data={block} locale={locale} />;
+      return <SectionHeading key={uniqueKey} data={block} />;
 
     default:
       return null;
@@ -75,7 +75,7 @@ const FeaturePage = async ({ locale }: FeaturePageProps) => {
   return (
     <Container>
       {/* Jika ingin menambahkan konten khusus halaman fitur di sini */}
-      {blocks.map((block: any, index: number) => blockRenderer(block, index, locale))}
+      {blocks.map((block: any, index: number) => blockRenderer(block, index))}
     </Container>
   );
 };

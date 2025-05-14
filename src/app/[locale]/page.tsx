@@ -102,16 +102,16 @@ async function loader(locale: string) {
   return data;
 }
 
-function blockRenderer(block: any, index: number, locale: string) {
+function blockRenderer(block: any, index: number) {
 
   const uniqueKey = `${block.id}-${index}`;
 
   switch (block.__component) {
     case "blocks.hero-section":
-      return <Hero key={uniqueKey} data={block} locale={locale} />;
+      return <Hero key={uniqueKey} data={block} />;
 
     case "blocks.section-heading":
-      return <SectionHeading key={uniqueKey} data={block} locale={locale} />;
+      return <SectionHeading key={uniqueKey} data={block} />;
 
     case "blocks.logo-carousel":
       return <LogoCarousel key={uniqueKey} data={block}></LogoCarousel>
@@ -120,19 +120,16 @@ function blockRenderer(block: any, index: number, locale: string) {
        return <CardGrid key={uniqueKey} data={block}></CardGrid>
 
     case "blocks.content-items":
-      return <Benefits key={uniqueKey} data={block} locale={locale} />;
-
-    case "blocks.yt-video":
-      return <Video key={uniqueKey} data={{ id: block.id, videoId: block.videoId }} locale={locale} />;
+      return <Benefits key={uniqueKey} data={block} />;
 
     case "blocks.card-quote":
-      return <Testimonials key={uniqueKey} data={block} locale={locale} />;
+      return <Testimonials key={uniqueKey} data={block} />;
 
     case "blocks.fa-qs":
-      return <Faq key={uniqueKey} data={block} locale={locale} />;
+      return <Faq key={uniqueKey} data={block} />;
 
     case "blocks.cta":
-      return <Cta key={uniqueKey} data={block} locale={locale} />;
+      return <Cta key={uniqueKey} data={block} />;
     default:
       return null;
   }
@@ -152,7 +149,7 @@ export default async function Home({
   };
   return (
     <Container>
-      {blocks.map((block: any, index: number) => blockRenderer(block, index, locale))}
+      {blocks.map((block: any, index: number) => blockRenderer(block, index))}
     </Container>
   );
 

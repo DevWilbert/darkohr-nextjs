@@ -30,7 +30,6 @@ interface HeroProps {
       name: string;
     };
   };
-  locale: string;
 }
 
 export function Hero({ data }: Readonly<HeroProps>) {

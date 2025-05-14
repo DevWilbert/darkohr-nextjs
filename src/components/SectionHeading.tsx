@@ -9,7 +9,6 @@ interface SectionHeadingProps {
     heading: string;
     text: string;
   };
-  locale: string;
 }
 
 const caveat = Caveat({
