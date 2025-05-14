@@ -252,7 +252,9 @@ export async function Footer({locale}: FooterProps) {
 
         {/* Copyright section */}
         <div className="py-8 mt-10 text-sm text-center text-gray-600 border-t border-gray-300 dark:border-trueGray-700 dark:text-gray-400">
-          Copyright © {new Date().getFullYear()}. Made with ♥ by{" "} DarkoHR
+          Copyright © {new Date().getFullYear()}. Made with{" "}
+          <span className="inline-block text-[#FB4D46] animate-heartbeat">♥</span> 
+          {" "}by{" "} DarkoHR
         </div>
       </Container>
     </footer>

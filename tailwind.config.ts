@@ -16,6 +16,18 @@ const config: Config = {
       colors: {
         trueGray: colors.neutral,
       },
+      keyframes: {
+        heartbeat: {
+          '0%': { transform: 'scale(1)' },
+          '14%': { transform: 'scale(1.3)' },
+          '28%': { transform: 'scale(1)' },
+          '42%': { transform: 'scale(1.3)' },
+          '70%': { transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        heartbeat: 'heartbeat 1.5s infinite'
+      }
     },
     fontFamily: {
       sans: ["Inter", ...defaultTheme.fontFamily.sans],
