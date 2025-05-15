@@ -65,9 +65,6 @@ async function loader(locale: string) {
               }
             }
           },
-          'blocks.yt-video': {
-            populate: '*'
-          },
           'blocks.card-quote': {
             populate: {
               cards: {

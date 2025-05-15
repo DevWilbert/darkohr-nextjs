@@ -1,32 +1,32 @@
+// components/StrapiImage.tsx
 import Image from "next/image";
 import { getStrapiMedia } from "@/lib/utils";
 
 interface StrapiImageProps {
-  src: string;
-  alt: string;
-  height: number;
+  src: string | null;
   width: number;
+  height: number;
   className?: string;
+  alt: string;
 }
 
-export function StrapiImage({
-  src,
-  alt,
-  height,
-  width,
-  className,
-}: Readonly<StrapiImageProps>) {
-  if (!src) return null;
-  const imageUrl = getStrapiMedia(src);
-  const imageFallback = `https://placehold.co/${width}x${height}`;
+export function StrapiImage({ src, width, height, className, alt }: StrapiImageProps) {
+  // Gunakan custom loader untuk gambar Strapi
+  const imgSrc = getStrapiMedia(src);
+  
+  if (!imgSrc) {
+    return null;
+  }
 
   return (
     <Image
-      src={imageUrl ?? imageFallback}
-      alt={alt}
-      height={height}
+      src={imgSrc}
       width={width}
-      className={className}
+      height={height}
+      className={className || ""}
+      alt={alt}
+      // Tambahkan unoptimized untuk mentrigger download gambar saat build time
+      unoptimized={process.env.NODE_ENV === 'production'}
     />
   );
 }

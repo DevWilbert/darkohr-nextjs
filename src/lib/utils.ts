@@ -46,9 +46,17 @@ export function getStrapiURLClient() {
   return process.env.NEXT_PUBLIC_STRAPI_BASE_URL ?? "http://localhost:1337";
 }
 
+// lib/utils.ts - modifikasi fungsi getStrapiMedia
 export function getStrapiMedia(url: string | null) {
   if (url == null) return null;
   if (url.startsWith("data:")) return url;
   if (url.startsWith("http") || url.startsWith("//")) return url;
+  
+  // Jika di production mode, gunakan path lokal untuk gambar statis
+  if (process.env.NODE_ENV === 'production' && url.startsWith('/uploads')) {
+    return `/static-images${url}`;
+  }
+  
+  // Jika tidak, gunakan URL Strapi biasa
   return `${getStrapiURLClient()}${url}`;
 }

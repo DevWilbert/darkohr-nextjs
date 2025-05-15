@@ -23,30 +23,10 @@ const nextConfig = () => {
           hostname: 'cms.example.com',
         },
       ],
+      unoptimized: process.env.NODE_ENV === 'production',
     },
   };
 };
-
-// const nextConfig = {
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "https",
-//         hostname: "placehold.co",
-//       },
-//       {
-//         protocol: "http",
-//         hostname: "localhost",
-//         port: "1337",
-//       },
-//       // Production - Strapi di hosting
-//       {
-//         protocol: 'https',
-//         hostname: 'cms.example.com',
-//       },
-//     ],
-//   },
-// };
 
 export default nextConfig;
 
