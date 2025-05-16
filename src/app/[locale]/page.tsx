@@ -94,7 +94,8 @@ async function loader(locale: string) {
   const url = new URL(path, baseUrl);
   url.search = query;
 
-  const data = await fetchData(url.href);
+  // Penambahan options revalidate (agar tidak fetch ulang (SSG) saat dev bisa dihilangkan)
+  const data = await fetchData(url.href, { next: { revalidate: false } });
   console.log("Fetching : ", data);
   return data;
 }

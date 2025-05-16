@@ -34,6 +34,6 @@ export async function fetchNavbarData(locale: string = 'id'): Promise<NavbarData
   const url = new URL(path, baseUrl);
   url.search = query;
 
-  const data = await fetchData(url.href);
+  const data = await fetchData(url.href, { next: { revalidate: false } });
   return data as NavbarData;
 }
